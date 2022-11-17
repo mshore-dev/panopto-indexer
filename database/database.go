@@ -26,12 +26,12 @@ func OpenDatabase(name string) (err error) {
 	create virtual table if not exists subtitles_fts using fts5(text, content_rowid=id);
 	create virtual table if not exists videos_fts using fts5(name, description, content_rowid=id);
 
-	create trigger subtitles_fts_insert after insert on subtitles
+	create trigger if not exists subtitles_fts_insert after insert on subtitles
 	begin
 		insert into subtitles_fts (rowid, text) values (new.rowid, new.text);
 	end;
 
-	create trigger videos_fts_insert after insert on videos
+	create trigger if not exists videos_fts_insert after insert on videos
 	begin
 		insert into videos_fts (rowid, name, description) values (new.rowid, new.name, new.description);
 	end;

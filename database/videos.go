@@ -1,11 +1,32 @@
 package database
 
-func addVideo(name, description string, tag int) (newVideoID int, err error)
+type Video struct {
+	ID int
+	Name string
+	Description string
+	TagID int
+	Tag string
+}
 
-func getVideoByID(id int)
+func AddVideo(name, description, file string) (int, error) {
+	resp, err := db.Exec("insert into videos(name, description, video_file) values (?,?,?)", name, description, file)
+	if err != nil {
+		return 0, err
+	}
 
-func findVideoByName(query string, tag int)
+	lastVideoID, err := resp.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
 
-func findVideoByDescription(query, tag int)
+	return int(lastVideoID), nil
 
-func tagVideo(id, tag int)
+}
+
+// func getVideoByID(id int) (err error, video Video)
+
+// func findVideosByName(query string, tag int) (err error, videos []Video)
+
+// func findVideosByDescription(query, tag int) (err error, videos []Video)
+
+// func tagVideo(id, tag int)
